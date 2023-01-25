@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script>
+    function convertToPNG() {
+        var image = document.getElementById('image').files[0];
+        if (!image) {
+            document.getElementById('error').innerHTML = "Please select an image";
+            return;
+        }
+        if (image.type !== 'image/jpeg') {
+            document.getElementById('error').innerHTML = "Please select a JPG image";
+            return;
+        }
+        if (image.size > 5000000) {
+            document.getElementById('error').innerHTML = "Image size should be less than 5MB";
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('image', image);
+
+        fetch('/api/jpgtopng.html', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // handle the response from the server
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <form>
+      <label for="image">Select JPG Image:</label>
+      <input type="file" id="image" name="image" accept=".jpg">
+      <br><br>
+      <button type="button" onclick="convertToPNG()">Convert to PNG</button>
+  </form>
+<div id="error"></div>
+</body>
+</html>
